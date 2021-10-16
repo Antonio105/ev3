@@ -1,0 +1,5 @@
+brick.MoveMotor('B',50);
+pause(5);
+brick.MoveMotor('B',-50);
+pause(5);
+brick.StopMotor('B');
