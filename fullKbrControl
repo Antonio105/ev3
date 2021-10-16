@@ -1,0 +1,36 @@
+%UNRAN
+
+global key
+InitKeyboard();
+while 1
+    pause(0.1);
+    switch key
+        %keyboard control / forward
+        case 'w'
+            brick.MoveMotor('A',50);
+            brick.MoveMotor('B',50);
+            
+        %keyboard control / turn right
+        case 'd'
+            brick.MoveMotor('B',50);
+            brick.MoveMotor('A',-50);
+            
+        %keyboard control / turn left
+        case 'a'  
+            brick.MoveMotor('B',-50);
+            brick.MoveMotor('A',50);
+        
+        %keyboard control / reverse
+        case 's'
+            brick.MoveMotor('B',-50);
+            brick.MoveMotor('A',-50);
+        
+        %Keyboard control / endProgram
+        case 'q'
+            break;
+    end
+end
+
+%CLOSES CONTROL WINDOW WHEN 'q' PRESSED
+CloseKeyboard();
+            
