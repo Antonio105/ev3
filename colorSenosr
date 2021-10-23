@@ -1,0 +1,43 @@
+brick.ColorRGB(4);
+color_rgb = brick.ColorRGB(4);
+
+fprintf("\tRed: %d\n", color_rgb(1));
+fprintf("\tGreen: %d\n", color_rgb(2));
+fprintf("\tBlue: %d\n", color_rgb(3));
+
+if (color_rgb(1) > 10 && color_rgb(2) > 10 && color_rgb(3) < 10) 
+     brick.MoveMotor('AB',-40); 
+     var1 = 1;
+     while (var1 == 1)
+         color_rgb = brick.ColorRGB(4);
+         fprintf("\tRed: %d\n", color_rgb(1));
+         fprintf("\tGreen: %d\n", color_rgb(2));
+         fprintf("\tBlue: %d\n", color_rgb(3));
+        if (color_rgb(1) > 10 && color_rgb(2) < 5 && color_rgb(3) < 5) 
+            brick.StopMotor('AB');
+           pause(4);
+           brick.MoveMotor('AB',-40);
+          var1 = 0;
+        end
+     end
+end
+
+
+global key
+InitKeyboard();
+while (color_rgb(1) < 5 &&  color_rgb(2) < 10 && color_rgb(3) < 10)
+    pause(0.1);
+    switch key
+        case 'a'
+            brick.MoveMotor('A',50);
+            pause(1);
+            brick.StopMotor('A');
+        case 'b'
+            brick.MoveMotor('B',100);
+            pause(1);
+            brick.StopMotor('B');
+        case 'q'
+            break;
+    end 
+end 
+CloseKeyboard();
