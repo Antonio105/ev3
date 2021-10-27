@@ -1,0 +1,36 @@
+brick.ColorRGB(4);
+color_rgb = brick.ColorRGB(4);
+%Prints RGB colors
+fprintf("\tRed: %d\n", color_rgb(1));
+fprintf("\tGreen: %d\n", color_rgb(2));
+fprintf("\tBlue: %d\n", color_rgb(3));
+
+if (color_rgb(1) > 10 && color_rgb(2) > 10 && color_rgb(3) < 10 && brick.TouchPressed(1)==0) 
+     brick.MoveMotor('AB',-70); 
+     var1 = 1;
+     %Once navigation starts, it continues to check for RGB colors
+     while (var1 == 1)
+         color_rgb = brick.ColorRGB(4);
+         fprintf("\tRed: %d\n", color_rgb(1));
+         fprintf("\tGreen: %d\n", color_rgb(2));
+         fprintf("\tBlue: %d\n", color_rgb(3));
+         if (brick.TouchPressed(1) == 1)
+            test = 1;
+            while (test == 1)
+                if (brick.TouchPressed(1)==1)
+                    brick.MoveMotor('AB', 80);
+                    pause(2);
+                    brick.MoveMotor('B',-40);
+                    brick.MoveMotor('A',40);
+                    pause(0.8);
+                    test = 0;
+                    if (test == 0)
+                        brick.StopMotor('AB');
+                        test = 0;
+                        var1 = 0;
+                    end
+                end
+            end
+         end
+     end
+end
