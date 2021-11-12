@@ -1,0 +1,124 @@
+global key;
+brick.ColorRGB(4);
+color_rgb = brick.ColorRGB(4);
+%Prints RGB colors
+fprintf("\tRed: %d\n", color_rgb(1));
+fprintf("\tGreen: %d\n", color_rgb(2));
+fprintf("\tBlue: %d\n", color_rgb(3));
+
+if (color_rgb(1) < 30 && color_rgb(2) < 15 && color_rgb(3) < 10) 
+     var1 = 1;
+     %Once navigation starts, it continues to check for RGB colors and
+     %Distane from wall
+     while (var1 == 1)
+         brick.MoveMotor('AB',-50); 
+         color_rgb = brick.ColorRGB(4);
+         brick.UltrasonicDist(3);
+         %If wall is touched, turn right
+         if (brick.TouchPressed(1) == 1)
+            brick.MoveMotor('AB', 60);
+            pause(0.25);
+            brick.MoveMotor('B',36.625);
+            brick.MoveMotor('A',-36.625);
+            pause(2.2);
+            brick.MoveMotor('AB', -15);
+            pause(0.20);
+            if (brick.UltrasonicDist(3) > 50)
+                pause(0.75);
+                brick.MoveMotor('B',-34.4);
+                brick.MoveMotor('A',34.4);  
+                pause(1.2);
+                brick.MoveMotor('AB', -50);
+                pause(3);
+            end
+            brick.MoveMotor('AB',-50);
+         end
+         %If opening is found (left-side), turn
+         if (brick.UltrasonicDist(3) > 50)
+            pause(0.75);
+            brick.MoveMotor('B',-34.4);
+            brick.MoveMotor('A',34.4);  
+            pause(1.1);
+            brick.MoveMotor('AB', -50);
+            pause(1);
+         end
+         
+         if (color_rgb(1) > 15 && color_rgb(2) < 5  && color_rgb(3) < 5)
+             brick.StopMotor('AB');
+             pause(1);
+             brick.MoveMotor('AB', -50);
+         end
+         
+         %Detect either blue or green zone and enter keyboard control
+         if (color_rgb(1) < 10 && color_rgb(2) > 5 && color_rgb(3) > 5  || color_rgb(1) < 10 && color_rgb(2) < 10 && color_rgb(3) > 15) 
+             brick.StopMotor('AB');  
+             pause(2);
+             keyTest = 1;
+             InitKeyboard();
+                while keyTest == 1
+                    pause(0.1);
+                    switch key
+                        %keyboard control / forward
+                        case 'w'
+                            brick.MoveMotor('A', -50);
+                            brick.MoveMotor('B',-50);
+                            pause(0.25);
+                            brick.StopMotor('AB');
+
+                        %keyboard control / turn right
+                        case 'd'
+                            brick.MoveMotor('B',50);
+                            brick.MoveMotor('A',-50);
+                            pause(0.15);
+                            brick.StopMotor('AB');
+                        %keyboard control / turn left
+                        case 'a'  
+                            brick.MoveMotor('B',-50);
+                            brick.MoveMotor('A', 50);
+                            pause(0.15);
+                            brick.StopMotor('AB');
+
+                        %keyboard control / reverse
+                        case 's'
+                            brick.MoveMotor('B',50);
+                            brick.MoveMotor('A',50);
+                            pause(0.25);
+                            brick.StopMotor('AB');
+
+                        %Keyboard control / pickup and resume automation
+                        case 'g'
+                                %pick up phase
+                                CloseKeyboard();
+                                brick.MoveMotor('AB', 25);
+                                pause(0.5);
+                                brick.StopMotor('AB');
+                                brick.MoveMotor('D', -15);
+                                pause(1);
+                                p
+                                keyTest = 0;
+                                break;
+                        case 'b'
+                            %Drop off
+                                CloseKeyboard();
+                                brick.MoveMotor('D', 30);
+                                pause(1);
+                                brick.StopMotor('D');
+                                brick.MoveMotor('AB', -40);
+                                pause(1.5);
+                                brick.StopMotor('AB');
+                                var1 = 0;
+                                keyTest = 0;
+                            break;
+                    
+                         case 'p'
+                            %Arrive at wrong color 
+                            CloseKeyboard();
+                            keyTest = 0;
+                            break;     
+                    end
+                end
+  
+         end
+     end
+ 
+end
